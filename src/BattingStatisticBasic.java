@@ -3,19 +3,19 @@ import java.math.RoundingMode;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class BattingStatistics {
+public class BattingStatisticBasic {
 
 	public static void main(String[] args) {
 		
 		boolean cont = true;
-		System.out.println("Welcome to Batting Average Calculator");
+		System.out.print("Welcome to Batting Average Calculator");
 		
 		do {
 			int nPlayers = numPlayers();
 			int[][] atBatArray = creatingArray(nPlayers);
 		
-			double[] BatAvg = calcPerc(atBatArray, nPlayers,0);
-			double[] SlugAvg = calcPerc(atBatArray, nPlayers,1);
+			double[] BatAvg = calcBatAvg(atBatArray, nPlayers);
+			double[] SlugAvg = calcSlugging(atBatArray, nPlayers);
 		
 			BigDecimal[] BatAvgRounded = getBigDecimal(BatAvg);
 			BigDecimal[] SlugPercRounded = getBigDecimal(SlugAvg);
@@ -38,40 +38,37 @@ public class BattingStatistics {
         Scanner sc = new Scanner(System.in);
         return sc.nextInt();
     }
-    //Getting number of players;
-    public static int numCheck(String enter, int value){
-    	int num;
+    
+    //Getting number of players
+    public static int numPlayers(){
+    	int numPlayers;
     	while(true){
-    		try{
-    			System.out.print(enter);
-    			num = test();
-    			if(value == 0){
-    				if (num <= 0) continue;
-    				else break;}
-    			else if(value==1){
-    				if (num < 0) continue;
-    				else break;
-    			}
-    		}catch(InputMismatchException ime){
+    		try{System.out.print("\nEnter number of players: ");
+			numPlayers = test();
+			if (numPlayers <= 0) continue;
+			else break;
+    		} catch(InputMismatchException ime){
     			System.out.println("You made an error");
     		}
 			
 		}
-		return num;
-    }
-    
-    //Getting number of players
-    public static int numPlayers(){
-    	String enterPlayer = "Enter the number of players: ";
-    	int numPlayers= numCheck(enterPlayer,0);
 		return numPlayers;
     }
 	
     //Getting user input for number of at bats
 	public static int creatingLength(){
-		String atBat = "Enter the number of at bats: ";
-		int numAtBat = numCheck(atBat,0);
-
+		int numAtBat;
+		
+		while (true){
+			try{System.out.println("Enter number of times at bat: ");
+			numAtBat = test();
+			
+			if (numAtBat <= 0) continue;
+			else break;
+			} catch(InputMismatchException ime){
+				System.out.println("You made an error");
+			}
+		}
 		return numAtBat;
 	}
 	
@@ -86,8 +83,8 @@ public class BattingStatistics {
 		for (int j=0;j<numPlayers;j++){
 			System.out.printf("Player %d at-bat result \n\n",(j+1));
 			for(int i=0; i<numAtBat;i++){
-				String enter = "Result for at-bat" +(i+1)+": ";
-				int AtBatValue = numCheck(enter,1);
+				System.out.printf("Result for at-bat %d: ",(i+1));
+				int AtBatValue = test();
 				if (AtBatValue < 0 || AtBatValue > 4){ 
 					--i;
 					continue;}
@@ -99,31 +96,40 @@ public class BattingStatistics {
 	}
 	
 	//Calculate the BattingAvg
-	public static double[] calcPerc(int[][] atBatArray, int players, int value){
+	public static double[] calcBatAvg(int[][] atBatArray, int players){
 		double[] batAvg = new double[players];  
-		double[] SlugPerc = new double[players];
-		
 		for (int j=0; j<atBatArray.length; j++){
 			double count = 0;
-			double total = 0;
 			for (int i=0; i<atBatArray[j].length; i++){
 				if (atBatArray[j][i] == 0){
 					continue;
 				}else{
 					++count;
-					total+=atBatArray[j][i];
 				}
 			}
 			batAvg[j] = count/atBatArray[j].length; 
-			SlugPerc[j] = total/atBatArray[j].length;
 		}
-		if(value == 0){
-			return batAvg;
+		return batAvg;
+	}
+	
+	//Calculate SluggingPercentage
+	public static double[] calcSlugging(int[][] atBatArray, int players){
+		double[] SlugPerc = new double[players];  
+		
+		for (int j=0; j<atBatArray.length; j++){
+			double total=0;
+			for (int i=0; i<atBatArray[j].length; i++){
+				if (atBatArray[j][i] == 0){
+					continue;
+				}else{
+					total+=atBatArray[j][i];
+				}
+			}
+			SlugPerc[j] = total/atBatArray[j].length; 
 		}
-		else{ 
-			return SlugPerc;
-		}
-	}	
+		return SlugPerc;
+	}
+	
 	//Creating Big Decimal 3 decimal long
 	public static BigDecimal[] getBigDecimal(double[] Avg){
 		BigDecimal[] BatAvgRounded = new BigDecimal[Avg.length];
@@ -168,3 +174,4 @@ public class BattingStatistics {
 		}
 	}
 }
+
