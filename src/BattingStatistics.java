@@ -1,8 +1,11 @@
+package teamtreehouse;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class BattingStatistics {
+public class Practice {
 
 	public static void main(String[] args) {
 		
@@ -42,11 +45,16 @@ public class BattingStatistics {
     public static int numPlayers(){
     	int numPlayers;
     	while(true){
-    		System.out.print("\nEnter number of players: ");
-			numPlayers = test();
-			
-			if (numPlayers <= 0) continue;
-			else break;
+    		try{
+    			System.out.print("\nEnter number of players: ");
+    			numPlayers = test();
+    			if (numPlayers <= 0) continue;
+    			else break;
+    		}
+    			catch(InputMismatchException e){
+    				System.out.println("Please enter a positive number: ");
+    		}
+
 		}
 		return numPlayers;
     }
@@ -55,12 +63,17 @@ public class BattingStatistics {
 	public static int creatingLength(){
 		int numAtBat;
 		
-		while (true){
-			System.out.println("Enter number of times at bat: ");
-			numAtBat = test();
-			
-			if (numAtBat <= 0) continue;
-			else break;
+    	while(true){
+    		try{
+    			System.out.print("\nEnter number of at-bats: ");
+    			numAtBat = test();
+    			if (numAtBat <= 0) continue;
+    			else break;
+    		}
+    			catch(InputMismatchException e){
+    				System.out.println("Please enter a positive number: ");
+    		}
+
 		}
 		return numAtBat;
 	}
